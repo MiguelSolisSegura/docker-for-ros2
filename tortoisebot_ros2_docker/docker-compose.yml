@@ -1,0 +1,25 @@
+version: '3'
+services:
+  gazebo:
+    image: miguelsolissegura/miguelsolissegura-cp22:tortoisebot-ros2-gazebo
+    environment:
+      - DISPLAY=${DISPLAY}
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
+    networks:
+      - ros_network
+
+  slam:
+    image: miguelsolissegura/miguelsolissegura-cp22:tortoisebot-ros2-slam
+    depends_on:
+      - gazebo
+    environment:
+      - DISPLAY=${DISPLAY}
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
+    networks:
+      - ros_network
+
+networks:
+  ros_network:
+    driver: bridge

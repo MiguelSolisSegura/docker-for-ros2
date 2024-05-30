@@ -1,0 +1,37 @@
+# Base image
+FROM osrf/ros:galactic-desktop
+
+# Install Gazebo 11 and other dependencies
+RUN apt-get update && apt-get install -y \
+  gazebo11 \
+  ros-galactic-gazebo-ros-pkgs \
+  ros-galactic-gazebo-ros2-control \
+  ros-galactic-ros2-control \
+  ros-galactic-ros2-controllers \
+  ros-galactic-joint-state-publisher \
+  ros-galactic-robot-state-publisher \
+  ros-galactic-robot-localization \
+  ros-galactic-xacro \
+  ros-galactic-tf2-ros \
+  ros-galactic-tf2-tools \
+  && rm -rf /var/lib/apt/lists/*
+
+# Make workspace
+WORKDIR /
+RUN mkdir -p /ros2_ws/src
+WORKDIR /ros2_ws/src
+
+# Copy the files in the current directory into the container
+COPY tortoisebot /ros2_ws/src/tortoisebot
+
+# Source ROS2 Galactic and build workspace
+RUN /bin/bash -c "source /opt/ros/galactic/setup.bash && cd /ros2_ws && colcon build"
+
+# Set the ROS master URI
+ENV ROS_MASTER_URI=http://ros_master:11311
+
+# Expose the necessary ports
+EXPOSE 11311
+
+# Set the entry point to run the launch file
+ENTRYPOINT ["/bin/bash", "-c", "source /ros2_ws/install/setup.bash && ros2 launch tortoisebot_bringup bringup.launch.py use_sim_time:=True"]
