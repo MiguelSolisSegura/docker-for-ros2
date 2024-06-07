@@ -2,6 +2,7 @@ version: '3'
 services:
   gazebo:
     image: miguelsolissegura/miguelsolissegura-cp22:tortoisebot-ros2-gazebo
+    container_name: tortoisebot-ros2-gazebo
     environment:
       - DISPLAY=${DISPLAY}
     volumes:
@@ -11,6 +12,7 @@ services:
 
   slam:
     image: miguelsolissegura/miguelsolissegura-cp22:tortoisebot-ros2-slam
+    container_name: tortoisebot-ros2-slam
     depends_on:
       - gazebo
     environment:
