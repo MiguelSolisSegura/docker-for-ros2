@@ -1,0 +1,40 @@
+# Use the official ROS2 Galactic base image for arm64 architecture
+FROM arm64v8/ros:galactic-ros-base
+
+# Install necessary packages
+RUN apt-get update && apt-get install -y \
+    ros-galactic-joint-state-publisher \
+    ros-galactic-robot-state-publisher \
+    ros-galactic-cartographer \
+    ros-galactic-cartographer-ros \
+    ros-galactic-gazebo-plugins \
+    ros-galactic-teleop-twist-keyboard \
+    ros-galactic-teleop-twist-joy \
+    ros-galactic-xacro \
+    ros-galactic-nav2* \
+    ros-galactic-urdf \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set up the colcon workspace
+WORKDIR /root/colcon_ws/src
+RUN /bin/bash -c "source /opt/ros/galactic/setup.bash && mkdir -p /root/colcon_ws/src"
+
+# Clone the TortoiseBot repository
+RUN git clone -b ros2-galactic https://github.com/rigbetellabs/tortoisebot.git /root/colcon_ws/src/tortoisebot
+
+# Install other dependencies
+RUN apt-get update && apt-get install -y \
+    ros-galactic-rviz2 \
+    python3-rpi.gpio \
+    ros-galactic-v4l2-camera \
+    && rm -rf /var/lib/apt/lists/*
+
+# Build the workspace
+WORKDIR /root/colcon_ws
+RUN /bin/bash -c "source /opt/ros/galactic/setup.bash && colcon build"
+
+# Source the workspace
+RUN echo "source /root/colcon_ws/install/setup.bash" >> /root/.bashrc
+
+# Set a placeholder entrypoint, to be updated later
+ENTRYPOINT ["/bin/bash", "-c", "source /root/colcon_ws/install/setup.bash && ros2 launch tortoisebot_bringup bringup.launch.py use_sim_time:=False"]

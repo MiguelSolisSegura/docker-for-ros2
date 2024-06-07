@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+  tortoisebot-ros2-real:
+    image: miguelsolissegura/miguelsolissegura-cp22:tortoisebot-ros2-real
+    container_name: tortoisebot-ros2-real
+    privileged: true
+    volumes:
+      - /dev/mem:/dev/mem
+      - /dev/vchiq:/dev/vchiq
+    networks:
+      - tortoisebot-net
+
+  tortoisebot-ros2-slam-real:
+    image: miguelsolissegura/miguelsolissegura-cp22:tortoisebot-ros2-slam-real
+    container_name: tortoisebot-ros2-slam-real
+    privileged: true
+    networks:
+      - tortoisebot-net
+
+networks:
+  tortoisebot-net:
+    driver: bridge

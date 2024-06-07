@@ -1,0 +1,5 @@
+# Use the existing image tortoisebot-ros2-real as the base image
+FROM tortoisebot-ros2-real
+
+# Set the entry point to run the specified launch file
+ENTRYPOINT ["/bin/bash", "-c", "source /root/colcon_ws/install/setup.bash && ros2 launch tortoisebot_slam cartographer.launch.py use_sim_time:=False slam:=True"]
