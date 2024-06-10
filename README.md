@@ -90,19 +90,3 @@ In some cases, the `gzserver` process might not die properly even after stopping
 ps faux | grep gz
 kill -9 <process_id>
 ```
-
-## Contributing
-
-Contributions are welcome! Please fork this repository, create a new branch, and submit a pull request with your changes.
-
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
-
-## Contact
-
-For any questions or issues, please open an issue on this repository or contact the repository owner at [your_email@example.com].
-
----
-
-Happy coding with TortoiseBot and Docker!
